@@ -1,0 +1,46 @@
+name: CI/CD Pipeline (Cloud + Real Deploy)
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write   # GitHub Pages için ZORUNLU
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository'yi cek
+        uses: actions/checkout@v4
+
+      - name: Ubuntu bilgilerini goster
+        run: |
+          echo "Isletim sistemi:"
+          uname -a
+          echo "Kullanici:"
+          whoami
+          echo "Dizin:"
+          pwd
+
+      - name: Repo icerigini listele
+        run: ls -la
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Python versiyonunu kontrol et
+        run: python --version
+
+      - name: Python kodunu calistir (CI)
+        run: python main.py
+
+      #  GERÇEK CD BAŞLIYOR
+      - name: Deploy to GitHub Pages (REAL CD)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
