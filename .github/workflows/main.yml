@@ -5,23 +5,24 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write   # GitHub Pages için ZORUNLU
+  contents: write   # GitHub Pages için zorunlu
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # 👈 CLOUD UBUNTU VM
 
     steps:
       - name: Repository'yi cek
         uses: actions/checkout@v4
 
-      - name: Ubuntu bilgilerini goster
+      - name: Ubuntu bilgilerini goster (CLOUD KANITI)
         run: |
-          echo "Isletim sistemi:"
+          echo "=== Ubuntu Cloud VM Bilgileri ==="
           uname -a
+          lsb_release -a || cat /etc/os-release
           echo "Kullanici:"
           whoami
-          echo "Dizin:"
+          echo "Calisma dizini:"
           pwd
 
       - name: Repo icerigini listele
@@ -38,7 +39,7 @@ jobs:
       - name: Python kodunu calistir (CI)
         run: python main.py
 
-      #  GERÇEK CD BAŞLIYOR
+      # GERÇEK CD
       - name: Deploy to GitHub Pages (REAL CD)
         uses: peaceiris/actions-gh-pages@v4
         with:
